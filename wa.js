@@ -44,11 +44,13 @@ function firstThreeRows(Columns[]){
 
 function createRow(Columns[]){
   for(var i = 0; i < Columns.length(); i++){
+    var points = [];
+    for(var j = 0; j < Columns[i].dots.length(); j++){
+      points.push([Columns[i].dots[j].getY(), Columns[i].dots[j].getX()]);
+    }
+    Columns[i].coefficients = regression.polynomial(points, {order: 3});
 
-    const data = ;
-    Columns[i].coefficients = regression.polynomial(data, {order: 3});
-
-    int y = Columns[i].dots[dots.length()-1].getY();
+    int y = Columns[i].dots[dots.length()-1].getY() + 30;
     int x = Columns[i].coefficients[0]*Math.pow(y, 3)
     + Columns[i].coefficients[1]*Math.pow(y, 2)
     + Columns[i].coefficients[2]*y + Columns[i].coefficients[3];
