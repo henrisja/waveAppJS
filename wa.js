@@ -1,47 +1,41 @@
 // Jim Henris 12/22/18
-import regression from 'regression';
+//import regression from 'regression';
 
 class Dot{
-  var x;
-  var y;
   constructor(x,y){
     this.x = x;
     this.y = y;
   }
-  getX(){
-    return this.x;
-  }
-  getY(){
-    return this.y;
-  }
 }
 
 class Column{
-  var dots = [];
-  var coefficients = [];
+  constructor(){
+    this.dots = new Array();
+    this.coefficients = new Array();
+  }
 }
 
-function firstThreeRows(Columns[]){
-  for (var i = 0; i < Column.length; i++) {
-    int x = 0;
-    int y = 0;
+function firstThreeRows(Columns){
+  for (var i = 0; i < Columns.length; i++) {
+    var x = 0;
+    var y = 0;
 
-    x = j*100 + (Math.random()*100 - 50);
-    y = (Math.random()* 200 - 100);
-    Columns[i].dots.push(Dot(x,y));
+    x = i*50 + (Math.random()*50 - 25);
+    y = (Math.random()* 100 - 50);
+    Columns[i].dots.push(new Dot(x,y));
   }
   for(var i = 0; i < 2; i++){
-    for(var j = 0; j < Columns.length(); j++){
-      int x = 0;
-      int y = 0;
+    for(var j = 0; j < Columns.length; j++){
+      var x = 0;
+      var y = 0;
 
-      x = Columns[j].dots[i].getX() + (Math.random()*2 - 1);
-      y = Columns[j].dots[i].getY() + 30;
-      Columns[j].dots.push(Dot(x,y));
+      x = Columns[j].dots[i].x + (Math.random()*2 - 1);
+      y = Columns[j].dots[i].y + 30;
+      Columns[j].dots.push(new Dot(x,y));
     }
   }
 }
-
+/*
 function createRow(Columns[]){
   for(var i = 0; i < Columns.length(); i++){
     var points = [];
@@ -58,17 +52,25 @@ function createRow(Columns[]){
     Columns[i].dots.push(Dot(x,y));
   }
 }
-
 function fixRow(Columns[]){
 
 }
+*/
+var Columns = new Array();
+for(var i = 0; i < 10; i++){
+  var add = new Column;
+  Columns.push(add);
+}
+firstThreeRows(Columns);
 
-function main(){
-  var Columns = [];
-  for(var i = 0; i < 10; i++){
-    var add = new Column;
-    Columns.push(add);
+var canvas = document.getElementById("mainCanvas");
+var c = canvas.getContext('2d');
+
+for(var i = 0; i < Columns[0].dots.length; i++){
+  for(var j = 0; j < Columns.length-1; j++){
+    c.beginPath();
+    c.moveTo(Columns[j].dots[i].x, Columns[j].dots[i].y);
+    c.lineTo(Columns[j+1].dots[i].x, Columns[j+1].dots[i].y);
+    c.stroke();
   }
-  firstThreeRows(Columns);
-  createRow(Columns);
 }
