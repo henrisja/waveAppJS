@@ -1,6 +1,4 @@
 // Jim Henris 12/22/18
-//import regression from 'regression';
-
 class Dot{
   constructor(x,y){
     this.x = x;
@@ -35,33 +33,33 @@ function firstThreeRows(Columns){
     }
   }
 }
-/*
-function createRow(Columns[]){
-  for(var i = 0; i < Columns.length(); i++){
-    var points = [];
-    for(var j = 0; j < Columns[i].dots.length(); j++){
-      points.push([Columns[i].dots[j].getY(), Columns[i].dots[j].getX()]);
+
+function createRow(Columns){
+  for(var i = 0; i < Columns.length; i++){
+    var points = new Array();
+    for(var j = 0; j < Columns[i].dots.length; j++){
+      points.push([Columns[i].dots[j].y, Columns[i].dots[j].x]);
     }
+    
     Columns[i].coefficients = regression.polynomial(points, {order: 3});
 
-    int y = Columns[i].dots[dots.length()-1].getY() + 30;
-    int x = Columns[i].coefficients[0]*Math.pow(y, 3)
+    var y = Columns[i].dots[dots.length()-1].y + 30;
+    var x = Columns[i].coefficients[0]*Math.pow(y, 3)
     + Columns[i].coefficients[1]*Math.pow(y, 2)
     + Columns[i].coefficients[2]*y + Columns[i].coefficients[3];
 
     Columns[i].dots.push(Dot(x,y));
   }
 }
-function fixRow(Columns[]){
 
-}
-*/
 var Columns = new Array();
 for(var i = 0; i < 10; i++){
   var add = new Column;
   Columns.push(add);
 }
 firstThreeRows(Columns);
+createRow(Columns);
+
 
 var canvas = document.getElementById("mainCanvas");
 var c = canvas.getContext('2d');
