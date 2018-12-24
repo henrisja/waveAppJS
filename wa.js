@@ -34,26 +34,10 @@ function firstThreeRows(Columns){
     }
   }
 }
-function cubic(params, x){
+function predict(params, x){
   return params[0]*x*x*x + params[1]*x*x + params[2]*x + params[3];
-}
-
-function objective(params, pointsX, pointsY){
-  var total = 0.0;
-  for(var i = 0; i < pointsY.length; ++i){
-    var resultThisDatum = cubic(params, pointsY[i]);
-    var delta = resultThisDatum - pointsX[i];
-    total += (delta*delta);
-  }
-  return total;
-}
-
-function curveFit(pointsX, pointsY, params){
-  var minimiser = numeric.uncmin(objective(params, pointsX, pointsY), coefficients);
-  return minimiser.solution();
 
 }
-
 function createRow(Columns){
   for(var i = 0; i < Columns.length; i++){
     var pointsX = new Array();
@@ -63,12 +47,33 @@ function createRow(Columns){
       pointsY.push(Columns[i].dots[j].y);
     }
 
-    Columns[i].coefficients = curveFit(pointsX, pointsY, Columns[i].coefficients);
+    var cubic = function(params,x) {
+      return params[0] * x*x*x +
+      params[1] * x*x +
+      params[2] * x +
+      params[3];
+    };
 
-    var y = Columns[i].dots[dots.length()-1].y + 30;
-    var x = cubic(Columns[i].coefficients, y);
+    var objective = function(params) {
+      var total = 0.0;
+      for(var i=0; i < pointsY.length; ++i) {
+        var resultThisDatum = cubic(params, pointsY[i]);
+        var delta = resultThisDatum - pointsX[i];
+        total += (delta*delta);
+      }
+      return total;
+    };
 
-    Columns[i].dots.push(Dot(x,y));
+    var initial = Columns[i].coefficients;
+
+    var minimiser = numeric.uncmin(objective, initial);
+
+    Columns[i].coefficients = minimiser.solution;
+
+    var y = Columns[i].dots[Columns[i].dots.length-1].y + 30;
+    var x = predict(Columns[i].coefficients, y);
+
+    Columns[i].dots.push(new Dot(x,y));
   }
 }
 
