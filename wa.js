@@ -36,7 +36,6 @@ function firstThreeRows(Columns){
 }
 function predict(params, x){
   return params[0]*x*x*x + params[1]*x*x + params[2]*x + params[3];
-
 }
 function createRow(Columns){
   for(var i = 0; i < Columns.length; i++){
