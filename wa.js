@@ -28,7 +28,7 @@ function firstThreeRows(Columns){
       var x = 0;
       var y = 0;
 
-      x = Columns[j].dots[i].x + (Math.random()*2 - 1);
+      x = Columns[j].dots[i].x + (Math.random()*4 - 2);
       y = Columns[j].dots[i].y + 30;
       Columns[j].dots.push(new Dot(x,y));
     }
@@ -44,7 +44,7 @@ function createRow(Columns){
     var pointsY = new Array();
     for(var j = 0; j < Columns[i].dots.length; j++){
       pointsX.push(Columns[i].dots[j].x);
-      pointsY.push(Columns[i].dots[j].y);
+      pointsY.push(Columns[i].dots[j].y / 250);
     }
 
     var cubic = function(params,x) {
@@ -71,7 +71,8 @@ function createRow(Columns){
     Columns[i].coefficients = minimiser.solution;
 
     var y = Columns[i].dots[Columns[i].dots.length-1].y + 30;
-    var x = predict(Columns[i].coefficients, y);
+    var newY = y/250;
+    var x = predict(Columns[i].coefficients, newY);
 
     Columns[i].dots.push(new Dot(x,y));
   }
@@ -84,7 +85,9 @@ for(var i = 0; i < 10; i++){
 }
 
 firstThreeRows(Columns);
-createRow(Columns)
+for(var i = 0; i < 4; i++){
+  createRow(Columns);
+}
 
 var canvas = document.getElementById("mainCanvas");
 var c = canvas.getContext('2d');
