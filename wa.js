@@ -1,4 +1,5 @@
 // Jim Henris 12/22/18
+
 class Dot{
   constructor(x,y){
     this.x = x;
@@ -9,7 +10,7 @@ class Dot{
 class Column{
   constructor(){
     this.dots = new Array();
-    this.coefficients = new Array();
+    this.coefficients = [1,1,1,1];
   }
 }
 
@@ -33,20 +34,39 @@ function firstThreeRows(Columns){
     }
   }
 }
+function cubic(params, x){
+  return params[0]*x*x*x + params[1]*x*x + params[2]*x + params[3];
+}
+
+function objective(params, pointsX, pointsY){
+  var total = 0.0;
+  for(var i = 0; i < pointsY.length; ++i){
+    var resultThisDatum = cubic(params, pointsY[i]);
+    var delta = resultThisDatum - pointsX[i];
+    total += (delta*delta);
+  }
+  return total;
+}
+
+function curveFit(pointsX, pointsY, params){
+  var minimiser = numeric.uncmin(objective(params, pointsX, pointsY), coefficients);
+  return minimiser.solution();
+
+}
 
 function createRow(Columns){
   for(var i = 0; i < Columns.length; i++){
-    var points = new Array();
+    var pointsX = new Array();
+    var pointsY = new Array();
     for(var j = 0; j < Columns[i].dots.length; j++){
-      points.push([Columns[i].dots[j].y, Columns[i].dots[j].x]);
+      pointsX.push(Columns[i].dots[j].x);
+      pointsY.push(Columns[i].dots[j].y);
     }
-    
-    Columns[i].coefficients = regression.polynomial(points, {order: 3});
+
+    Columns[i].coefficients = curveFit(pointsX, pointsY, Columns[i].coefficients);
 
     var y = Columns[i].dots[dots.length()-1].y + 30;
-    var x = Columns[i].coefficients[0]*Math.pow(y, 3)
-    + Columns[i].coefficients[1]*Math.pow(y, 2)
-    + Columns[i].coefficients[2]*y + Columns[i].coefficients[3];
+    var x = cubic(Columns[i].coefficients, y);
 
     Columns[i].dots.push(Dot(x,y));
   }
@@ -57,9 +77,9 @@ for(var i = 0; i < 10; i++){
   var add = new Column;
   Columns.push(add);
 }
-firstThreeRows(Columns);
-createRow(Columns);
 
+firstThreeRows(Columns);
+createRow(Columns)
 
 var canvas = document.getElementById("mainCanvas");
 var c = canvas.getContext('2d');
