@@ -1,3 +1,3 @@
 # waveAppJS
 
-Improved version of the java 'waveApp'. Improvements are primarily in 'cross-over' handling as well as in general layout of data structures and approach to the problem. Currently underway, will be using in conjunction w/ HTML Canvas on website upon completion. 
+Slight simplification of the 'waveApp' so I could see it in the browser. No real headway being made here, just wanted to be able to show the concept to some friends. The Wallpaper photo in here was made by me by hand in Gravit Designer.
